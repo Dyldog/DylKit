@@ -21,7 +21,14 @@ public struct UserDefaultable<T: Codable> {
         }
         set {
             guard let data = try? JSONEncoder().encode(newValue) else { return }
-            store.set(data: data, for: key)
+            
+            // JSONEncoder turns `nil` into the string `"null"`. It makes it look like there's a
+            // value when there shouldn't be one
+            if String(data: data, encoding: .utf8) == "null" {
+                store.set(data: nil, for: key)
+            } else {
+                store.set(data: data, for: key)
+            }
             forceUpdate()
         }
     }

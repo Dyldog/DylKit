@@ -18,6 +18,7 @@
 		115E41462A432F1B00ABE2ED /* DemoListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 115E41452A432F1B00ABE2ED /* DemoListView.swift */; };
 		115E41482A4330CB00ABE2ED /* ColoredListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 115E41472A4330CB00ABE2ED /* ColoredListView.swift */; };
 		115E414A2A433B5000ABE2ED /* ArrayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 115E41492A433B5000ABE2ED /* ArrayView.swift */; };
+		11A063F32A4349FF00DCC812 /* NotesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11A063F22A4349FF00DCC812 /* NotesView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -53,6 +54,7 @@
 		115E41452A432F1B00ABE2ED /* DemoListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DemoListView.swift; sourceTree = "<group>"; };
 		115E41472A4330CB00ABE2ED /* ColoredListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColoredListView.swift; sourceTree = "<group>"; };
 		115E41492A433B5000ABE2ED /* ArrayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArrayView.swift; sourceTree = "<group>"; };
+		11A063F22A4349FF00DCC812 /* NotesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotesView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -154,6 +156,7 @@
 				115E41132A43258B00ABE2ED /* UserDefaultableView.swift */,
 				115E41472A4330CB00ABE2ED /* ColoredListView.swift */,
 				115E41492A433B5000ABE2ED /* ArrayView.swift */,
+				11A063F22A4349FF00DCC812 /* NotesView.swift */,
 			);
 			path = Demos;
 			sourceTree = "<group>";
@@ -293,6 +296,7 @@
 			files = (
 				115E41142A43258B00ABE2ED /* UserDefaultableView.swift in Sources */,
 				115E41122A43258B00ABE2ED /* DylKitDemoApp.swift in Sources */,
+				11A063F32A4349FF00DCC812 /* NotesView.swift in Sources */,
 				115E414A2A433B5000ABE2ED /* ArrayView.swift in Sources */,
 				115E41462A432F1B00ABE2ED /* DemoListView.swift in Sources */,
 				115E41482A4330CB00ABE2ED /* ColoredListView.swift in Sources */,

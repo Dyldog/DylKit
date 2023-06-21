@@ -14,7 +14,8 @@ struct DylKitDemoApp: App {
             NavigationView {
                 DemoListView(demos: [
                     ("Data Storage", [
-                        .init("User Defaults", UserDefaultableView())
+                        .init("User Defaults", UserDefaultableView()),
+                        .init("Notes", NotesView())
                     ]),
                     ("UI", [
                         .init("Coloured List", ColoredListView())
