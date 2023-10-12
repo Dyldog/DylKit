@@ -44,7 +44,7 @@ public class NotesDatabase {
             let notesDirectoryURL = notesDirectoryURL, notesDirectoryURL.startAccessingSecurityScopedResource()
         else { return nil }
         
-        let output = work(notesDirectoryURL.path.appending(path))
+        let output = work(notesDirectoryURL.path.appending(path.withPrefix("/")))
         
         notesDirectoryURL.stopAccessingSecurityScopedResource()
         
@@ -57,6 +57,17 @@ public class NotesDatabase {
         } ?? false
     }
     
+    public func getNotes(in folder: String) -> [Note]? {
+        return accessNotes(at: folder) { url in
+            guard let files = try? manager.contentsOfDirectory(atPath: url)
+            else { return nil }
+            
+            return files
+                .filter { $0.hasSuffix(".md") }
+                .compactMap { getNote($0) }
+        }
+    }
+    
     public func getNote(_ file: String) -> Note? {
         return accessNotes(at: file) { url in
             guard
@@ -67,8 +78,8 @@ public class NotesDatabase {
             }
             
             return .init(
-                path: url,
-                title: file.replacingOccurrences(of: ".md", with: ""),
+                path: url.replacingOccurrences(of: notesDirectoryURL?.path ?? "", with: ""),
+                title: file.replacingOccurrences(of: ".md", with: "").trimmingCharacters(in: .init(["/"])),
                 contents: contents
             )
         }

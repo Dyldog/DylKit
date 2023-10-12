@@ -7,8 +7,12 @@
 
 import Foundation
 
-public struct Note {
+public struct Note: Hashable, Equatable {
     public let path: String
     public let title: String
     public let contents: String
+}
+
+extension Note: Identifiable {
+    public var id: String { path }
 }
