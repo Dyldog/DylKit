@@ -7,7 +7,7 @@
 
 import Foundation
 
-public extension Array {
+public extension Sequence {
     func sorted<T: Comparable>(by keypath: KeyPath<Element, T>, ascending: Bool) -> [Element] {
         return self.sorted(by: { (lhs, rhs) in
             if ascending {
