@@ -12,4 +12,12 @@ public extension String {
         guard !self.hasPrefix(prefix) else { return self }
         return prefix + self
     }
+    
+    func removingPrefix(_ prefix: String) -> String {
+        if self.hasPrefix(prefix) {
+            return String(self.dropFirst())
+        } else {
+            return self
+        }
+    }
 }

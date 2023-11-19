@@ -26,7 +26,10 @@ public class NotesDatabase {
             guard
                 let newValue = newValue,
                 newValue.startAccessingSecurityScopedResource()
-            else { return }
+            else {
+                notesDirectoryBookmark = nil
+                return
+            }
             
             notesDirectoryBookmark = try! newValue.bookmarkData(options: .suitableForBookmarkFile, includingResourceValuesForKeys: nil, relativeTo: nil)
             newValue.stopAccessingSecurityScopedResource()
