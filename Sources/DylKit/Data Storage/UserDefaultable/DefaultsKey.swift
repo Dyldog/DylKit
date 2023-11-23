@@ -7,7 +7,7 @@
 
 import Foundation
 
-public protocol DefaultsKey: RawRepresentable, CaseIterable where RawValue == String { }
+public protocol DefaultsKey: RawRepresentable where RawValue == String { }
 
 public extension DefaultsKey {
     func `get`<T: Codable>(from store: DefaultsStore = UserDefaults.standard) throws -> T {

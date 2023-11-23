@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+#if canImport(UIKit)
 struct ScrollViewPagingModifier: ViewModifier {
     func body(content: Content) -> some View {
         content
@@ -24,3 +25,4 @@ public extension ScrollView {
         modifier(ScrollViewPagingModifier())
     }
 }
+#endif

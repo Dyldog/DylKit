@@ -7,13 +7,20 @@
 
 import Foundation
 
-func onMain(_ work: @escaping () -> Void) {
+public func onMain(_ work: @escaping () -> Void) {
     DispatchQueue.main.async {
         work()
     }
 }
 
-func onBG(_ work: @escaping () -> Void) {
+public func onMainSync(_ work: @escaping () -> Void) {
+    DispatchQueue.main.sync {
+        work()
+    }
+}
+
+
+public func onBG(_ work: @escaping () -> Void) {
     DispatchQueue.global().async {
         work()
     }

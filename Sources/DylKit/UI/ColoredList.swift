@@ -50,9 +50,13 @@ public struct ColoredList<Data, Content, BarContent>: View where Data: RandomAcc
             .frame(maxWidth: .infinity)
             .cornerRadius(8)
             .background(Color.black)
-        }
-        .navigationBarTitleDisplayMode(.inline)
-        .toolbar {
+        }.map {
+            #if canImport(UIKit)
+            $0.navigationBarTitleDisplayMode(.inline)
+            #elseif os(OSX)
+            $0
+            #endif
+        } .toolbar {
             ToolbarItem(placement: .principal) {
                 ZStack {
                     VStack {

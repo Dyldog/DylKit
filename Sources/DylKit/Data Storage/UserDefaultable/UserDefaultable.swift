@@ -7,6 +7,15 @@
 
 import Foundation
 
+struct StringDefaultsKey: DefaultsKey, RawRepresentable {
+    let value: String
+    var rawValue: String { value }
+    
+    init(rawValue: String) {
+        self.value = rawValue
+    }
+}
+
 @propertyWrapper
 public struct UserDefaultable<T: Codable> {
     
@@ -35,6 +44,12 @@ public struct UserDefaultable<T: Codable> {
     
     public init(wrappedValue: T, key: any DefaultsKey, store: DefaultsStore = UserDefaults.standard) {
         self.key = key
+        self.initial = wrappedValue
+        self.store = store
+    }
+    
+    public init(wrappedValue: T, key: String, store: DefaultsStore = UserDefaults.standard) {
+        self.key = StringDefaultsKey(rawValue: key)
         self.initial = wrappedValue
         self.store = store
     }

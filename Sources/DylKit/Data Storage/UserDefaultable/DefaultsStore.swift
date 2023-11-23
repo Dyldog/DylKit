@@ -32,7 +32,7 @@ public extension DefaultsStore {
 }
 
 public extension DefaultsStore {
-    func overwriteAllValues<T: DefaultsKey>(of keyType: T.Type) {
+    func overwriteAllValues<T: DefaultsKey & CaseIterable>(of keyType: T.Type) {
         T.allCases.forEach {
             overwriteValues(for: $0)
         }

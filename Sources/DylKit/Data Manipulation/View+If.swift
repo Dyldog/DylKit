@@ -16,4 +16,12 @@ public extension View {
             return AnyView(self)
         }
     }
+    
+    func `if`<T>(_ value: T?, modified: (Self, T) -> any View) -> AnyView {
+        if let value = value {
+            return AnyView(modified(self, value))
+        } else {
+            return AnyView(self)
+        }
+    }
 }
