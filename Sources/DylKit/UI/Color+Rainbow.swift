@@ -12,3 +12,11 @@ public extension Color {
         [.red, .orange, .yellow, .green, .blue, .indigo, .purple]
     }
 }
+//
+//struct RepeatingArray<Element>: RandomAccessCollection {
+//    let values: [Element]
+//    
+//    func makeIterator() -> some IteratorProtocol {
+//        IndexingIterator(_elements: values)
+//    }
+//}
