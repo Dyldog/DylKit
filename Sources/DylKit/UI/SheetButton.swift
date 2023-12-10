@@ -14,10 +14,11 @@ public struct SheetButton<Title: View, Content: View>: View {
     @ViewBuilder var content: Content
     let onDismiss: () -> Void
     
-    init(showSheet: Bool, title: @escaping () -> Title, content: Content, onDismiss: @escaping () -> Void) {
+    
+    public init(showSheet: Bool = false, title: @escaping () -> Title, @ViewBuilder content: () -> Content, onDismiss: @escaping () -> Void) {
         self._showSheet = .init(initialValue: showSheet)
         self.title = title
-        self.content = content
+        self.content = content()
         self.onDismiss = onDismiss
     }
     
