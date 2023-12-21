@@ -7,14 +7,17 @@
 
 import SwiftUI
 
+#if canImport(UIKit)
 public extension View {
     /// Creates a button that wraps and disables the given view when `onEdit` is present
     /// - Parameter onEdit: The closure to trigger when this edit button is tapped
     /// - Returns: The edit button
-    func onEdit(_ onEdit: (() -> Void)?) -> AnyView {
-        if let onEdit = onEdit {
-            SwiftUI.Button {
+    func editable(_ editing: Bool, onEdit: @escaping () -> Void, onLongPress: @escaping () -> Void) -> AnyView {
+        if editing {
+            LongPressButton {
                 onEdit()
+            } longPressAction: {
+                onLongPress()
             } label: {
                 self.disabled(true).background(.background)
             }
@@ -25,3 +28,4 @@ public extension View {
         }
     }
 }
+#endif

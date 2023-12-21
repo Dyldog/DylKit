@@ -13,18 +13,6 @@ import AppKit
 
 import SwiftUI
 
-protocol Application {
-    func endEditing(_ force: Bool)
-}
-
-var SharedApplication: Application {
-#if canImport(UIKit)
-    return UIApplication.shared
-#elseif os(OSX)
-    return NSApplication.shared
-#endif
-}
-
 #if canImport(UIKit)
 extension UIApplication: Application {
     func endEditing(_ force: Bool) {
@@ -51,7 +39,7 @@ public extension View {
 }
 #elseif os(OSX)
 extension NSApplication: Application {
-    func endEditing(_ force: Bool) {
+    public func endEditing(_ force: Bool) {
         //
     }
 }

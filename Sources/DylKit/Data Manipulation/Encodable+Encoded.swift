@@ -8,9 +8,9 @@
 import Foundation
 
 extension Encodable {
-    func encoded() -> Data { try! JSONEncoder().encode(self) }
+    public func encoded() -> Data { try! JSONEncoder().encode(self) }
 }
 
 extension Array where Element: Encodable {
-    func encoded() -> Data { try! JSONEncoder().encode(self) }
+    public func encoded() -> Data { try! JSONEncoder().encode(self) }
 }

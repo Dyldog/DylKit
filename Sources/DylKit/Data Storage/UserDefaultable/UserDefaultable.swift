@@ -25,8 +25,15 @@ public struct UserDefaultable<T: Codable> {
     
     public var wrappedValue: T {
         get {
-            guard let data = store.data(for: key) else { return initial }
-            return (try? JSONDecoder().decode(T.self, from: data)) ?? initial
+            do {
+                if let data = store.data(for: key) {
+                    return try JSONDecoder().decode(T.self, from: data)
+                } 
+            } catch {
+                print(error)
+            }
+            
+            return initial
         }
         set {
             guard let data = try? JSONEncoder().encode(newValue) else { return }
