@@ -7,7 +7,6 @@
 
 import SwiftUI
 
-#if canImport(UIKit)
 public extension View {
     /// Creates a button that wraps and disables the given view when `onEdit` is present
     /// - Parameter onEdit: The closure to trigger when this edit button is tapped
@@ -28,4 +27,3 @@ public extension View {
         }
     }
 }
-#endif

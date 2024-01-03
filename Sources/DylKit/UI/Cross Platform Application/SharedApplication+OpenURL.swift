@@ -14,7 +14,11 @@ import AppKit
 #endif
 
 #if canImport(UIKit)
-
+public extension UIApplication {
+    func openURL(_ url: URL) {
+        open(url)
+    }
+}
 #elseif os(OSX)
 public extension NSApplication {
     func openURL(_ url: URL) {
