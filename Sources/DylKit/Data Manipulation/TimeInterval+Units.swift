@@ -13,4 +13,6 @@ public extension TimeInterval {
 	static var oneHour: TimeInterval { 60 * .oneMinute }
 	static var oneDay: TimeInterval { 24 * .oneHour }
 	static var oneWeek: TimeInterval { 7 * .oneDay }
+    static var oneMonth: TimeInterval { 30 * .oneDay }
+    static var oneYear: TimeInterval { 365 * .oneDay }
 }
