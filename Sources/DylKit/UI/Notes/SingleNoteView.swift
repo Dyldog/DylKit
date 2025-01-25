@@ -47,6 +47,10 @@ public struct SingleNoteViewModel {
     func writeNote() {
         note.write(fileText)
     }
+    
+    func clearNoteFolder() {
+        notes.notesDirectoryURL = nil
+    }
 }
 
 public struct SingleNoteView: View {
@@ -69,6 +73,11 @@ public struct SingleNoteView: View {
                 Button("Note doesn't exist. Create?") {
                     viewModel.createNote()
                 }
+                
+                Button("Clear note folder?") {
+                    viewModel.clearNoteFolder()
+                }
+                .foregroundStyle(.red)
             }
             
             Spacer()
