@@ -1,0 +1,42 @@
+//
+//  File.swift
+//  
+//
+//  Created by Dylan Elliott on 25/1/2025.
+//
+
+import UIKit
+import SwiftUI
+
+extension View {
+    func showAppNoteOnShake(binding: Binding<Bool>) -> some View {
+        showNoteOnShake(UIApplication.shared.name, binding: binding)
+    }
+}
+
+extension UIViewController {
+    func showAppNote() {
+        showNote(UIApplication.shared.name)
+    }
+}
+
+extension UIDevice {
+    static let deviceDidShakeNotification = Notification.Name(rawValue: "deviceDidShakeNotification")
+}
+
+//  Override the default behavior of shake gestures to send our notification instead.
+extension UIWindow {
+     open override func motionEnded(_ motion: UIEvent.EventSubtype, with event: UIEvent?) {
+        if motion == .motionShake {
+            NotificationCenter.default.post(name: UIDevice.deviceDidShakeNotification, object: nil)
+        }
+     }
+    
+    @objc private func showAppNote() {
+        rootViewController?.showAppNote()
+    }
+    
+    public func showAppNoteOnShake() {
+        NotificationCenter.default.addObserver(self, selector: #selector(showAppNote), name: UIDevice.deviceDidShakeNotification, object: nil)
+    }
+}
