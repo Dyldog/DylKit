@@ -11,7 +11,7 @@ import SwiftUI
 struct DylKitDemoApp: App {
     var body: some Scene {
         WindowGroup {
-            NavigationView {
+            NavigationStack {
                 DemoListView(demos: [
                     ("Data Storage", [
                         .init("User Defaults", UserDefaultableView()),

@@ -25,8 +25,8 @@ extension UIImage {
     public convenience init?(systemName: String, pointSize: CGFloat) {
 #if canImport(UIKit)
         self.init(
-            systemName: name.valueString,
-            withConfiguration: UIImage.SymbolConfiguration(pointSize: CGFloat(size.value))
+            systemName: systemName,
+            withConfiguration: UIImage.SymbolConfiguration(pointSize: pointSize)
         )
 #else
         self.init(systemName: systemName)

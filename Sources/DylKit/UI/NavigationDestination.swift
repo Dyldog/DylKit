@@ -11,16 +11,29 @@ struct NavigationStackModifier<Item, Destination: View>: ViewModifier {
     let item: Binding<Item?>
     let destination: (Item) -> Destination
 
+    @ViewBuilder
+    func destinationView() -> some View {
+        if let item = item.wrappedValue {
+            destination(item)
+        } else {
+            EmptyView()
+        }
+    }
+    
     func body(content: Content) -> some View {
-        content.background(NavigationLink(isActive: item.mappedToBool()) {
-            if let item = item.wrappedValue {
-                destination(item)
-            } else {
+        if #available(iOS 16.0, *) {
+            content.navigationDestination(isPresented: item.mappedToBool()) {
+                destinationView()
+            }
+        } else {
+            // Fallback on earlier versions
+            NavigationLink {
+                destinationView()
+            } label: {
                 EmptyView()
             }
-        } label: {
-            EmptyView()
-        })
+
+        }
     }
 }
 

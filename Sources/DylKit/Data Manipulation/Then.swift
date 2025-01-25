@@ -15,7 +15,7 @@ protocol Thenable { }
 
 extension Thenable {
     func then(_ work: (Self) -> Void) -> Self {
-        var value = self
+        let value = self
         work(value)
         return value
     }

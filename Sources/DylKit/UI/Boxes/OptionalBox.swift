@@ -26,7 +26,7 @@ public class OptionalBox<T>: ObservableObject {
     }
     
     public var unwrappedBinding: Binding<T>? {
-        guard let value else { return nil }
+        guard value != nil else { return nil }
         
         return .init { [unowned self] in
             self.value!
