@@ -5,7 +5,9 @@
 //  Created by Dylan Elliott on 18/8/2024.
 //
 
+#if canImport(UIKit)
 import UIKit
+#endif
 
 infix operator ^: AdditionPrecedence
 
@@ -22,4 +24,7 @@ public extension Funcable {
     }
 }
 
+#if canImport(UIKit)
 extension UIView: Funcable { }
+#endif
+

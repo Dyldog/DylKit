@@ -5,6 +5,8 @@
 //  Created by Dylan Elliott on 25/1/2025.
 //
 
+#if canImport(UIKit)
+
 import UIKit
 import SwiftUI
 
@@ -42,3 +44,5 @@ extension UIWindow {
         NotificationCenter.default.addObserver(self, selector: #selector(showAppNote), name: UIDevice.deviceDidShakeNotification, object: nil)
     }
 }
+
+#endif

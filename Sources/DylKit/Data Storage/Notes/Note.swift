@@ -5,7 +5,11 @@
 //  Created by Dylan Elliott on 22/6/2023.
 //
 
+import Foundation
+
+#if canImport(UIKit)
 import UIKit
+#endif
 
 public struct Note: Hashable, Equatable {
     public let path: String
@@ -19,7 +23,7 @@ public extension Note {
     private var noteURL: URL { .init(string: "obsidian://open?file=\(sanitisedTitle)")! }
     
     func open() {
-        UIApplication.shared.open(noteURL)
+        SharedApplication.openURL(noteURL)
     }
 }
 

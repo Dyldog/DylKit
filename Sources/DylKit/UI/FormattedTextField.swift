@@ -5,6 +5,7 @@
 //  Created by Dylan Elliott on 18/8/2024.
 //
 
+#if canImport(UIKit)
 import UIKit
 
 public class FormattedTextField<T: Equatable>: UITextField, UITextFieldDelegate {
@@ -45,3 +46,5 @@ extension UITextField {
         return NSRange(location: location, length: length)
     }
 }
+
+#endif

@@ -5,6 +5,7 @@
 //  Created by Dylan Elliott on 25/1/2025.
 //
 
+#if canImport(UIKit)
 import SwiftUI
 
 extension View {
@@ -22,3 +23,4 @@ extension UIViewController {
         present(hostingController, animated: true)
     }
 }
+#endif

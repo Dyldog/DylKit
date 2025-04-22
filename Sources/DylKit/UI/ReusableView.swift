@@ -5,6 +5,7 @@
 //  Created by Dylan Elliott on 29/12/2024.
 //
 
+#if canImport(UIKit)
 import UIKit
 
 public protocol ReusableView: AnyObject {
@@ -47,3 +48,5 @@ public extension UICollectionView {
         return cell
     }
 }
+
+#endif
