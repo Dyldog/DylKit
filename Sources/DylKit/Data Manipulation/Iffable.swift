@@ -11,12 +11,12 @@ public protocol Iffable { }
 
 public extension Iffable {
     func `if`(_ condition: @autoclosure () -> Bool, work: (Self) -> Self) -> Self {
-        if condition() {
-            work(self)
-        } else {
-            self
-        }
+        condition() ? work(self) : self
     }
 }
 
-extension Array: Iffable { }
+extension Array: Iffable {
+    public func mapIf(_ condition: @autoclosure () -> Bool, work: (Element) -> Element) -> Self {
+        condition() ? map { work($0) } : self
+    }
+}

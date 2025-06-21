@@ -5,7 +5,52 @@
 //  Created by Dylan Elliott on 22/6/2023.
 //
 
+import HighlightedTextEditor
 import SwiftUI
+
+enum MarkdownToken: String {
+    case squareBracketLink
+    case uncheckedTodo
+    case checkedTodo
+}
+
+enum MarkdownSymbol {
+    enum Todo: String {
+        case checked = "- [x]"
+        case unchecked = "- [ ]"
+    }
+}
+
+extension HighlightedTextEditor {
+    
+    
+    static let boldItalics = try! NSRegularExpression(pattern: "_[^_]+_", options: [])
+    static let noteLinks = try! NSRegularExpression(pattern: "\\[\\[[^\\[\\]]+\\]\\]", options: [])
+    static let uncheckedTodo = try! NSRegularExpression(pattern: "\\s*- \\[ \\]", options: [])
+    static let checkedTodo = try! NSRegularExpression(pattern: "\\s*- \\[x\\]", options: [])
+    static let tagged = try! NSRegularExpression(pattern: "#\\w+", options: [])
+    
+    static let linkStyle = TextFormattingRule(fontTraits: [.traitItalic, .traitBold])
+    
+    static let rules = HighlightedTextEditor.markdown + [
+        HighlightRule(pattern: noteLinks, formattingRules: [
+            linkStyle,
+            TextFormattingRule(key: .link, value: MarkdownToken.squareBracketLink.rawValue)
+        ]),
+        HighlightRule(pattern: uncheckedTodo, formattingRules: [
+            linkStyle,
+            TextFormattingRule(key: .link, value: MarkdownToken.uncheckedTodo.rawValue)
+        ]),
+        HighlightRule(pattern: checkedTodo, formattingRules: [
+            linkStyle,
+            TextFormattingRule(key: .link, value: MarkdownToken.checkedTodo.rawValue)
+        ]),
+        HighlightRule(pattern: tagged, formattingRules: [
+            TextFormattingRule(key: .foregroundColor, value: UIColor.white),
+            TextFormattingRule(key: .backgroundColor, value: UIColor.systemGreen)
+        ])
+    ]
+}
 
 public struct SingleNoteViewModel {
     private let notes: NotesDatabase = .init()
@@ -51,12 +96,30 @@ public struct SingleNoteViewModel {
     func clearNoteFolder() {
         notes.notesDirectoryURL = nil
     }
+    
+    mutating func didSelectLink(url: URL, text: String, at range: NSRange) {
+        func replace(_ a: String, with b: String) {
+            fileText = (fileText as NSString).replacingCharacters(
+                in: range,
+                with: text.replacingOccurrences(of: a, with: b)
+            )
+        }
+        switch MarkdownToken(rawValue: url.absoluteString) {
+        case .uncheckedTodo:
+            replace(MarkdownSymbol.Todo.unchecked.rawValue, with: MarkdownSymbol.Todo.checked.rawValue)
+        case .checkedTodo:
+            replace(MarkdownSymbol.Todo.checked.rawValue, with: MarkdownSymbol.Todo.unchecked.rawValue)
+        case .squareBracketLink, .none:
+            break
+        }
+    }
 }
 
 public struct SingleNoteView: View {
     
     @State var viewModel: SingleNoteViewModel
     @State var showImporter: Bool = false
+    @State var style: DisplayStyle = .markdown
     
     public init(viewModel: SingleNoteViewModel) {
         self.viewModel = viewModel
@@ -64,11 +127,36 @@ public struct SingleNoteView: View {
     
     public var body: some View {
         VStack(alignment: .leading, spacing: 10) {
-            Text(viewModel.note.noteName)
-                .bold()
+            HStack {
+                Text(viewModel.note.noteName)
+                    .bold()
+                
+                Spacer()
+                
+                Picker("Style", selection: $style)
+                    .pickerStyle(.menu)
+                    .labelsHidden()
+            }
             
             if viewModel.note.exists {
-                TextEditor(text: $viewModel.fileText)
+                switch style {
+                case .markdown:
+                    HighlightedTextEditor(
+                        text: $viewModel.fileText,
+                        highlightRules: HighlightedTextEditor.rules,
+                        onLinkClick: { url, text, range in
+                            if url.scheme != nil {
+                                return true
+                            } else {
+                                viewModel.didSelectLink(url: url, text: text, at: range)
+                                return false
+                            }
+                        }
+                    )
+                case .raw:
+                    TextEditor(text: $viewModel.fileText)
+                }
+
             } else {
                 Button("Note doesn't exist. Create?") {
                     viewModel.createNote()
@@ -82,7 +170,8 @@ public struct SingleNoteView: View {
             
             Spacer()
         }
-        .padding().if(!viewModel.hasSelectedDirectory) {
+        .padding()
+        .if(!viewModel.hasSelectedDirectory) {
             $0.fileImporter(isPresented: $showImporter, allowedContentTypes: [.folder]) { result in
                 showImporter = false
                 
@@ -94,6 +183,20 @@ public struct SingleNoteView: View {
         }.onAppear {
             viewModel.onAppear()
             showImporter = true
+        }
+    }
+}
+
+extension SingleNoteView {
+    enum DisplayStyle: Pickable, CaseIterable {
+        case markdown
+        case raw
+        
+        var title: String {
+            switch self {
+            case .markdown: "Markdown"
+            case .raw: "Raw"
+            }
         }
     }
 }

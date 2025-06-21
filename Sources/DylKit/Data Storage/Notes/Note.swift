@@ -15,6 +15,14 @@ public struct Note: Hashable, Equatable {
     public let path: String
     public let title: String
     public let contents: String
+    
+    public var filename: String {
+        path.filename
+    }
+    
+    public var fileExtension: String {
+        path.fileExtension
+    }
 }
 
 public extension Note {

@@ -12,7 +12,7 @@ import SwiftUI
 
 private let AppNotePath = "\(UIApplication.shared.name)"
 
-extension View {
+public extension View {
     func showAppNoteOnShake(binding: Binding<Bool>) -> some View {
         showNoteOnShake(AppNotePath, binding: binding)
     }

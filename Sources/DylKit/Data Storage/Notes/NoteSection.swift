@@ -14,6 +14,11 @@ public struct NoteSection {
 }
 
 extension NoteSection {
+    public var lines: [String] {
+        contents
+        .trimmingCharacters(in: .whitespacesAndNewlines)
+        .components(separatedBy: "\n")
+    }
     var textRepresentation: String {
         var paddedContents = contents
         

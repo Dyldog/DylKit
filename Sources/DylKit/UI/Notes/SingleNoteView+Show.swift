@@ -10,9 +10,11 @@ import SwiftUI
 
 extension View {
     func showNoteOnShake(_ name: String, binding: Binding<Bool>) -> some View {
-        self.sheet(isPresented: binding, content: {
+        self.onShake {
+            binding.wrappedValue = true
+        }.sheet(isPresented: binding) {
             SingleNoteView(viewModel: .init(noteName: name))
-        })
+        }
     }
 }
 

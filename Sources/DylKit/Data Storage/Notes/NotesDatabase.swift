@@ -60,32 +60,39 @@ public class NotesDatabase {
         } ?? false
     }
     
-    public func getNotes(in folder: String) -> [Note]? {
+    public func getNotes(in folder: String, filetypes: [String] = ["md"]) -> [Note]? {
         return accessNotes(at: folder) { url in
             guard let files = try? manager.contentsOfDirectory(atPath: url)
             else { return nil }
             
             return files
-                .filter { $0.hasSuffix(".md") }
+                .filter {
+                    guard let filetype = $0.components(separatedBy: ".").last else { return false }
+                    return filetypes.contains(filetype.lowercased())
+                }
                 .compactMap { getNote($0) }
         }
     }
     
-    public func getNote(_ file: String) -> Note? {
+    public func getFile(_ file: String) -> (String, Data?)? {
         return accessNotes(at: file) { url in
-            guard
-                let data = manager.contents(atPath: url),
-                let contents = String(data: data, encoding: .utf8)
-            else {
-                return nil
-            }
-            
-            return .init(
-                path: url.replacingOccurrences(of: notesDirectoryURL?.path ?? "", with: ""),
-                title: file.replacingOccurrences(of: ".md", with: "").trimmingCharacters(in: .init(["/"])),
-                contents: contents
-            )
+            return (url, manager.contents(atPath: url))
         }
+    }
+    
+    public func getNote(_ file: String) -> Note? {
+        guard
+            let (url, data) = getFile(file), let data,
+            let contents = String(data: data, encoding: .utf8)
+        else {
+            return nil
+        }
+        
+        return .init(
+            path: url.replacingOccurrences(of: notesDirectoryURL?.path ?? "", with: ""),
+            title: file.fileTitle.trimmingCharacters(in: .init(["/"])),
+            contents: contents
+        )
     }
     
     public func createNote(_ file: String, contents: String) {
