@@ -15,7 +15,7 @@ public enum TMDBAPI: API {
         }
     }
     
-    public static var defaultParameters: [String: String] = ["api_key": Secrets.TMDB.apiKey]
+    public var defaultParameters: [String: String] { ["api_key": Secrets.TMDB.apiKey] }
     
     case searchPeople(String)
     case getCredits(Int)

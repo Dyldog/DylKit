@@ -7,9 +7,9 @@
 
 import Foundation
 
-public protocol API {
+public protocol API: Loadable {
     var baseURL: URL { get }
-    static var defaultParameters: [String: String] { get }
+    var defaultParameters: [String: String] { get }
     
     var path: String { get }
     var parameters: [String: String] { get }
@@ -17,7 +17,7 @@ public protocol API {
 
 public extension API {
     private var allParameters: [String: String] {
-        Self.defaultParameters.merging(parameters, uniquingKeysWith: { a, b in b })
+        defaultParameters.merging(parameters, uniquingKeysWith: { a, b in b })
     }
     
     var url: URL {
@@ -36,29 +36,22 @@ public extension API {
 }
 
 public extension API {
-    @discardableResult
-    func retrieve<T: Decodable>(_ type: T.Type, completion: @escaping  BlockIn<Result<T, APIError>>) -> URLSessionDataTask {
-        let task = URLSession.shared.dataTask(with: request) { data, response, error in
-            if let _ = error {
-                completion(.failure(.general))
-                return
-            } else if let data = data {
-                do {
-                    let value = try JSONDecoder().decode(T.self, from: data)
-                    completion(.success(value))
-                } catch {
-                    print(error)
-                    print(data.string ?? "COULDN'T DECODE STRING FROM DATA")
-                    completion(.failure(.general))
-                }
-            } else {
-                // Got no data or error
-                completion(.failure(.general))
-            }
+//    @discardableResult
+//    func retrieve(completion: @escaping  BlockIn<Result<Data, APIError>>) async /*-> URLSessionDataTask*/ {
+//        
+//    }
+    
+    func retrieve() async throws -> Data {
+        let task: (data: Data, response: URLResponse)
+        let taskError: Error?
+        
+        do {
+            let task: (data: Data, response: URLResponse) = await try URLSession.shared.data(for: request)
+            return task.data
+        } catch {
+            throw APIError.general
         }
         
-        task.resume()
-        
-        return task
+//        return task
     }
 }
