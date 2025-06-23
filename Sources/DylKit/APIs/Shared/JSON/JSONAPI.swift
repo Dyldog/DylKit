@@ -10,7 +10,6 @@ import Foundation
 public protocol JSONAPI: TypedAPI { }
 
 public extension JSONAPI {
-//    @discardableResult
     func retrieve<T: Decodable>(_ type: T.Type) async throws -> T {
         let data: Data = try await retrieve()
         do {

@@ -22,9 +22,7 @@ public struct HTMLAPI<HTMLData: HTMLDataType>: TypedAPI {
 }
 
 public extension HTMLAPI {
-//    @discardableResult
     func retrieve(
-//        completion: @escaping  BlockIn<Result<HTMLData, APIError>>
     ) async throws -> HTMLData {
         let data: Data = try await retrieve()
         

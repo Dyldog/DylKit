@@ -36,11 +36,6 @@ public extension API {
 }
 
 public extension API {
-//    @discardableResult
-//    func retrieve(completion: @escaping  BlockIn<Result<Data, APIError>>) async /*-> URLSessionDataTask*/ {
-//        
-//    }
-    
     func retrieve() async throws -> Data {
         let task: (data: Data, response: URLResponse)
         let taskError: Error?
@@ -51,7 +46,5 @@ public extension API {
         } catch {
             throw APIError.general
         }
-        
-//        return task
     }
 }
