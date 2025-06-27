@@ -5,6 +5,7 @@
 //  Created by Dylan Elliott on 23/6/2025.
 //
 
+import DylKit
 import Foundation
 
 public struct MappedAPI<MappedData> {

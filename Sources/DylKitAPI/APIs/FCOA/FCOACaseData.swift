@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import DylKit
 import SwiftSoup
 
 public struct FCOACaseData: Codable, Hashable, HTMLDataElementType {

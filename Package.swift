@@ -11,22 +11,24 @@ let package = Package(
     ],
     products: [
         // Products define the executables and libraries a package produces, and make them visible to other packages.
-        .library(
-            name: "DylKit",
-            targets: ["DylKit"]),
+        .library(name: "DylKit", targets: ["DylKit"]),
+        .library(name: "DylKitAPI", targets: ["DylKitAPI"]),
+        .library(name: "DylKitNotes", targets: ["DylKitNotes"]),
     ],
     dependencies: [
-        // Dependencies declare other packages that this package depends on.
-        // .package(url: /* package url */, from: "1.0.0"),
         .package(url: "https://github.com/Dyldog/HighlightedTextEditor", branch: "main"),
         .package(url: "https://github.com/scinfu/SwiftSoup.git", from: "2.8.8")
     ],
     targets: [
-        // Targets are the basic building blocks of a package. A target can define a module or a test suite.
-        // Targets can depend on other targets in this package, and on products in packages this package depends on.
         .target(
             name: "DylKit",
-            dependencies: ["HighlightedTextEditor", "SwiftSoup"]),
+            dependencies: []),
+        .target(
+            name: "DylKitAPI",
+            dependencies: ["DylKit", "SwiftSoup"]),
+        .target(
+            name: "DylKitNotes",
+            dependencies: ["DylKit", "HighlightedTextEditor"]),
         .testTarget(
             name: "DylKitTests",
             dependencies: ["DylKit"]),

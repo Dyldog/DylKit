@@ -7,14 +7,23 @@
 
 #if canImport(UIKit)
 
+import DylKit
 import UIKit
 import SwiftUI
 
 private let AppNotePath = "\(UIApplication.shared.name)"
 
+struct AppNoteShakeModifier: ViewModifier {
+    @State var show: Bool = false
+    
+    func body(content: Content) -> some View {
+        content.showNoteOnShake(AppNotePath, binding: $show)
+    }
+}
+
 public extension View {
-    func showAppNoteOnShake(binding: Binding<Bool>) -> some View {
-        showNoteOnShake(AppNotePath, binding: binding)
+    func showAppNoteOnShake() -> some View {
+        modifier(AppNoteShakeModifier())
     }
 }
 
@@ -24,18 +33,7 @@ extension UIViewController {
     }
 }
 
-extension UIDevice {
-    static let deviceDidShakeNotification = Notification.Name(rawValue: "deviceDidShakeNotification")
-}
-
-//  Override the default behavior of shake gestures to send our notification instead.
 extension UIWindow {
-     open override func motionEnded(_ motion: UIEvent.EventSubtype, with event: UIEvent?) {
-        if motion == .motionShake {
-            NotificationCenter.default.post(name: UIDevice.deviceDidShakeNotification, object: nil)
-        }
-     }
-    
     @objc private func showAppNote() {
         rootViewController?.showAppNote()
     }
