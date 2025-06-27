@@ -9,19 +9,34 @@ import Foundation
 import SwiftUI
 
 public extension View {
-    func `if`(_ condition: Bool, modified: (Self) -> any View) -> AnyView {
+    @ViewBuilder
+    func `if`<Out: View>(_ condition: Bool, @ViewBuilder modified: (Self) -> Out) -> some View {
         if condition {
-            return AnyView(modified(self))
+            modified(self)
         } else {
-            return AnyView(self)
+            self
         }
     }
     
-    func `if`<T>(_ value: T?, modified: (Self, T) -> any View) -> AnyView {
-        if let value = value {
-            return AnyView(modified(self, value))
+    @ViewBuilder
+    func `if`<If: View, Else: View>(
+        _ condition: Bool,
+        ifModifier: (Self) -> If,
+        else: (Self) -> Else
+    ) -> some View {
+        if condition {
+            ifModifier(self)
         } else {
-            return AnyView(self)
+            `else`(self)
+        }
+    }
+    
+    @ViewBuilder
+    func `if`<T, Out: View>(_ value: T?, modified: (Self, T) -> Out) -> some View {
+        if let value = value {
+            modified(self, value)
+        } else {
+            self
         }
     }
 }
