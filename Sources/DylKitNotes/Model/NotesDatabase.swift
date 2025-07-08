@@ -11,6 +11,8 @@ import Foundation
 public class NotesDatabase {
     enum Defaults: String, DefaultsKey {
         case notesBookmark = "NOTES_BOOKMARK"
+        
+        var store: DefaultsStore { UserDefaults.standard }
     }
     private let manager = FileManager()
     

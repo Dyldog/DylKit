@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct TMDBMoviePerson: Decodable {
+public struct TMDBMoviePerson: Codable, Hashable {
     public let id: Int
     public let name: String
     public let profile_path: String?

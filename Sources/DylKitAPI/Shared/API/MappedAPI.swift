@@ -8,18 +8,25 @@
 import DylKit
 import Foundation
 
-public struct MappedAPI<MappedData> {
-    var retrieve: () async throws -> [MappedData]
+public struct MappedAPI<Input: LoadableInput, MappedData>: Loadable {
+    public typealias Loaded = MappedData
+    public typealias Input = Input
+    var retrieve: (Input) async throws -> MappedData
     
-    init<API: TypedAPI>(api: API, mapper: @escaping BlockInOut<API.DataType, [MappedData]>) {
-        self.retrieve = {
-            return mapper(try await api.retrieve())
+    init<API: Loadable>(api: API, mapper: @escaping BlockInOut<API.Loaded, MappedData>) where API.Input == Input {
+        self.retrieve = { input in
+            return mapper(try await api.retrieve(input))
         }
+    }
+    
+    public func retrieve(_ input: Input) async throws -> MappedData {
+        try await retrieve(input)
     }
 }
 
-extension TypedAPI {
-    public func mapped<MappedData>(_ mapper: @escaping BlockInOut<DataType, [MappedData]>) -> MappedAPI<MappedData> {
+extension Loadable {
+    public func mapped<MappedOut>(_ mapper: @escaping BlockInOut<Loaded, MappedOut>) -> MappedAPI<Input, MappedOut> {
         .init(api: self, mapper: mapper)
     }
 }
+

@@ -10,9 +10,15 @@ import Foundation
 struct StringDefaultsKey: DefaultsKey, RawRepresentable {
     let value: String
     var rawValue: String { value }
+    let store: DefaultsStore
+    
+    init(rawValue: String, store: DefaultsStore) {
+        self.value = rawValue
+        self.store = store
+    }
     
     init(rawValue: String) {
-        self.value = rawValue
+        self.init(rawValue: rawValue, store: UserDefaults.standard)
     }
 }
 
@@ -21,8 +27,8 @@ public struct UserDefaultable<T: Codable> {
     
     let key: any DefaultsKey
     let initial: T
-    let store: DefaultsStore
     
+    var store: DefaultsStore { key.store }
     public var wrappedValue: T {
         get {
             do {
@@ -36,29 +42,31 @@ public struct UserDefaultable<T: Codable> {
             return initial
         }
         set {
-            guard let data = try? JSONEncoder().encode(newValue) else { return }
-            
-            // JSONEncoder turns `nil` into the string `"null"`. It makes it look like there's a
-            // value when there shouldn't be one
-            if String(data: data, encoding: .utf8) == "null" {
-                store.set(data: nil, for: key)
-            } else {
-                store.set(data: data, for: key)
-            }
+            self.setValue(newValue)
             forceUpdate()
         }
     }
     
-    public init(wrappedValue: T, key: any DefaultsKey, store: DefaultsStore = UserDefaults.standard) {
-        self.key = key
-        self.initial = wrappedValue
-        self.store = store
+    public func setValue(_ newValue: T) {
+        guard let data = try? JSONEncoder().encode(newValue) else { return }
+        
+        // JSONEncoder turns `nil` into the string `"null"`. It makes it look like there's a
+        // value when there shouldn't be one
+        if String(data: data, encoding: .utf8) == "null" {
+            store.set(data: nil, for: key)
+        } else {
+            store.set(data: data, for: key)
+        }
     }
     
-    public init(wrappedValue: T, key: String, store: DefaultsStore = UserDefaults.standard) {
+    public init(wrappedValue: T, key: any DefaultsKey) {
+        self.key = key
+        self.initial = wrappedValue
+    }
+    
+    public init(wrappedValue: T, key: String) {
         self.key = StringDefaultsKey(rawValue: key)
         self.initial = wrappedValue
-        self.store = store
     }
     
     // HACK: SwiftUI updates don't get triggered when we set a new value (because we're only updating
@@ -67,5 +75,11 @@ public struct UserDefaultable<T: Codable> {
     private var updater: Bool = false
     mutating private func forceUpdate() {
         updater.toggle()
+    }
+}
+
+public extension UserDefaultable where T: RangeReplaceableCollection {
+    func append(_ element: T.Element) {
+        setValue(wrappedValue + [element])
     }
 }

@@ -9,5 +9,11 @@ import Foundation
 
 public protocol TypedAPI: API {
     associatedtype DataType
-    func retrieve() async throws -> DataType
+    func retrieve(_ intput: Input) async throws -> DataType
+}
+
+extension TypedAPI where Input == EmptyInput {
+    func retrieve() async throws -> DataType {
+        try await retrieve(EmptyInput())
+    }
 }

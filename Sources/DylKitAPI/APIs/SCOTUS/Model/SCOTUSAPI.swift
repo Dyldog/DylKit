@@ -11,5 +11,5 @@ public enum SCOTUSAPI {
     static var baseURL: URL { .init(string: "https://www.law.cornell.edu")! }
     static let defaultParameters: [String : String] = [:]
     
-    public static let allCases: HTMLAPI<SCOTUSCaseListData> = .init(baseURL: SCOTUSAPI.baseURL, path: "/supremecourt/text")
+    public static let allCases: HTMLAPI<EmptyInput, SCOTUSCaseListData> = .init(baseURL: SCOTUSAPI.baseURL, path: "/supremecourt/text")
 }

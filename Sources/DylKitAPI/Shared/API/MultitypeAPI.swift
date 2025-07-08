@@ -7,19 +7,24 @@
 
 import Foundation
 
-public struct MultitypeAPI<MappedData>: Loadable {
-    let apis: [MappedAPI<MappedData>]
+public protocol MultitypeAPIData {
+    static var empty: Self { get }
+    func append(contentsOf: Self) -> Self
+}
+
+public struct MultitypeAPI<Input: LoadableInput, MappedData: MultitypeAPIData>: Loadable {
+    let apis: [MappedAPI<Input, MappedData>]
     
-    public init(apis: [MappedAPI<MappedData>]) {
+    public init(apis: [MappedAPI<Input, MappedData>]) {
         self.apis = apis
     }
     
-    public func retrieve() async throws -> [MappedData] {
+    public func retrieve(_ input: Input) async throws -> MappedData {
         
-        var mapped: [MappedData] = []
+        var mapped: MappedData = .empty
         
         for api in apis {
-            mapped.append(contentsOf: try await api.retrieve())
+            mapped.append(contentsOf: try await api.retrieve(input))
         }
         
         return mapped

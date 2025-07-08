@@ -5,6 +5,7 @@
 //  Created by Dylan Elliott on 21/6/2025.
 //
 
+#if canImport(UIKit)
 import SwiftUI
 
 // A view modifier that detects shaking and calls a function of our choosing.
@@ -26,3 +27,4 @@ public extension View {
         self.modifier(DeviceShakeViewModifier(action: action))
     }
 }
+#endif

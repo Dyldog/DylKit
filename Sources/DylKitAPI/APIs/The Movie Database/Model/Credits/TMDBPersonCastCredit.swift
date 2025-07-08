@@ -7,14 +7,14 @@
 
 import Foundation
 
-struct TMDBPersonCastCredit: Decodable, TMDBPersonCreditType {
-    let id: Int
-    let title: String
-    let character: String
-    let overview: String
-    let release_date: String
-    var poster_path: String?
-    var genre_ids: [Int]
+public struct TMDBPersonCastCredit: Decodable, TMDBPersonCreditType, Hashable {
+    public let id: Int
+    public let title: String
+    public let character: String
+    public let overview: String
+    public let release_date: String
+    public var poster_path: String?
+    public var genre_ids: [Int]
     
-    var role: String { character }
+    public var role: String { character }
 }

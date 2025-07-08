@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+#if canImport(UIKit)
 public extension Color {
     static var lightBlue: Color {
         Color(hex: "#ade6e6")
@@ -26,3 +27,4 @@ public extension ShapeStyle where Self == Color {
     static var actualYellow: Color { .actualYellow }
     static var actualGreen: Color { .actualGreen }
 }
+#endif
