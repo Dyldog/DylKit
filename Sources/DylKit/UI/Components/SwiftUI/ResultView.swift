@@ -37,16 +37,20 @@ public struct ResultView<Success, Failure: Error, SuccessView: View, FailView: V
 public extension ResultView where Success: RandomAccessCollection {
     init<SuccessRow: View>(
         _ result: Result<Success, Failure>?,
+        filter: @escaping (Success.Element) -> Bool = { _ in true },
+        sort: @escaping (Success.Element, Success.Element) -> Bool = { _,_ in true },
         success: @escaping (Success.Element) -> SuccessRow,
         failure: @escaping (Failure) -> FailView
-    ) where SuccessView == ForEach<[(offset: Int, element: Success.Element)], Int, SuccessRow> {
+    ) where SuccessView == List<Never, ForEach<[(offset: Int, element: Success.Element)], Int, SuccessRow>> {
         self.init(
             result: result, 
             success: { data in
-                ForEach(data) {
-                    success($0)
+                List {
+                    ForEach(data.filter { filter($0) }.sorted { sort($0, $1) }) {
+                        success($0)
+                    }
                 }
-            }, 
+            },
             failure: failure
         )
     }

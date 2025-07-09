@@ -9,7 +9,15 @@ import Foundation
 
 public protocol MultitypeAPIData {
     static var empty: Self { get }
-    func append(contentsOf: Self) -> Self
+    mutating func append(contentsOfAPIData other: Self)
+}
+
+extension Array: MultitypeAPIData {
+    public static var empty: Array<Element> { [] }
+    
+    public mutating func append(contentsOfAPIData other: Array<Element>) {
+        self.append(contentsOf: other)
+    }
 }
 
 public struct MultitypeAPI<Input: LoadableInput, MappedData: MultitypeAPIData>: Loadable {
@@ -24,7 +32,7 @@ public struct MultitypeAPI<Input: LoadableInput, MappedData: MultitypeAPIData>: 
         var mapped: MappedData = .empty
         
         for api in apis {
-            mapped.append(contentsOf: try await api.retrieve(input))
+            mapped.append(contentsOfAPIData: try await api.retrieve(input))
         }
         
         return mapped
