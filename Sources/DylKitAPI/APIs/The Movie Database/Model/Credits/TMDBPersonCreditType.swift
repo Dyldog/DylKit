@@ -38,6 +38,12 @@ extension TMDBPersonCreditType {
 }
 
 public extension Array where Element: TMDBPersonCreditType {
+    var movies: [TMDBMovie] {
+        map { $0.movie }
+    }
+}
+
+public extension Array where Element: TMDBPersonCreditType {
     func credits(for movieID: Int) -> [String] {
         self.filter { $0.id == movieID }.map { $0.role }
     }

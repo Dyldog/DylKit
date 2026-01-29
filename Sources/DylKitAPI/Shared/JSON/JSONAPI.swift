@@ -41,7 +41,7 @@ public struct JSONAPI<Input: LoadableInput, JSONData: Decodable>: TypedAPI {
     public init(baseURL: URL, path: String, parameters: [String : String] = [:]) {
         self.baseURL = baseURL
         self.makePath = { _ in path }
-        self.makeParameters = {_ in [:] }
+        self.makeParameters = {_ in parameters }
     }
     
     public init(baseURL: URL, path: @escaping (Input) -> String, parameters: @escaping (Input) -> APIInput = { _ in [:] }) {
@@ -54,6 +54,7 @@ public struct JSONAPI<Input: LoadableInput, JSONData: Decodable>: TypedAPI {
 public extension JSONAPI {
     func retrieve(_ input: Input) async throws -> JSONData {
         let data: Data = try await retrieve(input)
+        try Task.checkCancellation()
         do {
             return try JSONDecoder().decode(JSONData.self, from: data)
         } catch {

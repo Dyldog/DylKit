@@ -34,3 +34,15 @@ extension Loadable where Input == EmptyInput {
         try await retrieve(EmptyInput())
     }
 }
+
+public extension Loadable {
+    func retrieve(_ input: Input, completion: @escaping (Result<Loaded, Error>) -> Void) -> Task<Void, Never> {
+        Task {
+            do {
+                completion(.success(try await retrieve(input)))
+            } catch {
+                completion(.failure(error))
+            }
+        }
+    }
+}

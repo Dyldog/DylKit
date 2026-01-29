@@ -12,8 +12,18 @@ public protocol TypedAPI: API {
     func retrieve(_ intput: Input) async throws -> DataType
 }
 
-extension TypedAPI where Input == EmptyInput {
+public extension TypedAPI where Input == EmptyInput {
     func retrieve() async throws -> DataType {
         try await retrieve(EmptyInput())
+    }
+    
+    func retrieve(completion: @escaping (Result<Loaded, Error>) -> Void) -> Task<Void, Never> {
+        Task {
+            do {
+                completion(.success(try await retrieve()))
+            } catch {
+                completion(.failure(error))
+            }
+        }
     }
 }

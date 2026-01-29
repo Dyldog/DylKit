@@ -106,4 +106,24 @@ public enum TMDBJSONAPI {
         path: { "/movie/\($0.movieID)" },
         parameters: { _ in TMDBAPI.defaultParameters }
     )
+    
+    public struct GetMovieCreditsInput: LoadableInput {
+        let movieID: Int
+        
+        public init(movieID: Int) {
+            self.movieID = movieID
+        }
+    }
+    
+    public static let getMovieCredits: JSONAPI<GetMovieCreditsInput, TMDBMovieCredits> = JSONAPI(
+        baseURL: TMDBAPI.baseURL,
+        path: { "/movie/\($0.movieID)/credits" },
+        parameters: { _ in TMDBAPI.defaultParameters }
+    )
+    
+    public static let getGenres: JSONAPI<EmptyInput, TMDBGenresResponse> = JSONAPI(
+        baseURL: TMDBAPI.baseURL,
+        path: "/genre/movie/list",
+        parameters: TMDBAPI.defaultParameters
+    )
 }
