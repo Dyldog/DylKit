@@ -8,7 +8,7 @@
 import Foundation
 import SwiftUI
 
-public protocol TMDBPersonCreditType {
+public protocol TMDBPersonCreditType: Equatable {
     var id: Int { get }
     var title: String { get }
     var role: String { get}
@@ -16,6 +16,12 @@ public protocol TMDBPersonCreditType {
     var release_date: String { get }
     var poster_path: String? { get }
     var genre_ids: [Int] { get }
+}
+
+public extension TMDBPersonCreditType {
+    static func == (lhs: Self, rhs: Self) -> Bool {
+        lhs.id == rhs.id
+    }
 }
 
 extension TMDBPersonCreditType {
@@ -38,6 +44,12 @@ extension TMDBPersonCreditType {
 }
 
 public extension Array where Element: TMDBPersonCreditType {
+    var movies: [TMDBMovie] {
+        map { $0.movie }
+    }
+}
+
+public extension Array where Element == TMDBPersonCreditType {
     var movies: [TMDBMovie] {
         map { $0.movie }
     }

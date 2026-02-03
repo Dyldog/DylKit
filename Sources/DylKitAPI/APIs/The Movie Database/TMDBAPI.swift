@@ -85,12 +85,12 @@ public enum TMDBJSONAPI {
         }
     }
     
-    public static let getCredits: MappedAPI<GetCreditsInput, [TMDBPersonCastCredit]> = JSONAPI(
+    public static let getCredits: MappedAPI<GetCreditsInput, [TMDBPersonCreditType]> = JSONAPI(
         baseURL: TMDBAPI.baseURL,
         path: { TMDBAPI.getCredits($0.actorID).path(with: .init()) },
         parameters: { _ in TMDBAPI.defaultParameters }
     ).mapped { (response: TMDBPersonCredits) in
-        response.cast
+        (response.cast + response.crew)
     }
     
     public struct GetMovieInput: LoadableInput {
